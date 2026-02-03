@@ -5,12 +5,12 @@ import hashlib
 import datetime
 import requests
 
-NAME = os.environ["NAME"]
-EMAIL = os.environ["EMAIL"]
-RESUME_LINK = os.environ["RESUME_LINK"]
-REPOSITORY_LINK = os.environ["REPOSITORY_LINK"]
-ACTION_RUN_LINK = os.environ["ACTION_RUN_LINK"]
-SIGNING_SECRET = os.environ["SIGNING_SECRET"].encode("utf-8")
+NAME = os.environ["NAME"].strip()
+EMAIL = os.environ["EMAIL"].strip()
+RESUME_LINK = os.environ["RESUME_LINK"].strip()
+REPOSITORY_LINK = os.environ["REPOSITORY_LINK"].strip()
+ACTION_RUN_LINK = os.environ["ACTION_RUN_LINK"].strip()
+SIGNING_SECRET = os.environ["SIGNING_SECRET"].strip().encode("utf-8")
 
 ENDPOINT = "https://b12.io/apply/submission"
 
@@ -32,7 +32,6 @@ body = json.dumps(
     ensure_ascii=False,
 ).encode("utf-8")
 
-# HMAC-SHA256 signature
 digest = hmac.new(
     SIGNING_SECRET,
     body,
