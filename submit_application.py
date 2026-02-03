@@ -47,11 +47,6 @@ headers = {
     "X-Signature-256": f"sha256={digest}",
 }
 
-# Debug (safe)
-print("DEBUG_BODY:", body.decode("utf-8"))
-print("DEBUG_SIGNATURE:", digest)
-print("DEBUG_ACTION_RUN_LINK:", ACTION_RUN_LINK)
-
 response = requests.post(
     ENDPOINT,
     data=body,
