@@ -6,13 +6,15 @@ on:
 jobs:
   submit:
     runs-on: ubuntu-latest
+
     env:
       NAME: ${{ vars.NAME }}
       EMAIL: ${{ vars.EMAIL }}
       RESUME_LINK: ${{ vars.RESUME_LINK }}
-      REPOSITORY_LINK: ${{ vars.REPOSITORY_LINK }}
+      REPOSITORY_LINK: https://github.com/${{ github.repository }}
       ACTION_RUN_LINK: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
       SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -23,5 +25,5 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
-      - name: Run submission script
+      - name: Run submission
         run: python submit_application.py
