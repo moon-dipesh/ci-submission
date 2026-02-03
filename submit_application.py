@@ -5,6 +5,7 @@ import hashlib
 import datetime
 import requests
 
+# Read & sanitize env vars
 NAME = os.environ["NAME"].strip()
 EMAIL = os.environ["EMAIL"].strip()
 RESUME_LINK = os.environ["RESUME_LINK"].strip()
@@ -14,6 +15,7 @@ SIGNING_SECRET = os.environ["SIGNING_SECRET"].strip().encode("utf-8")
 
 ENDPOINT = "https://b12.io/apply/submission"
 
+# ISO 8601 UTC timestamp
 timestamp = datetime.datetime.utcnow().isoformat(timespec="milliseconds") + "Z"
 
 payload = {
@@ -25,13 +27,14 @@ payload = {
     "action_run_link": ACTION_RUN_LINK,
 }
 
+# Canonical JSON (THIS MUST NOT CHANGE)
 body = json.dumps(
     payload,
     sort_keys=True,
     separators=(",", ":"),
-    ensure_ascii=False,
 ).encode("utf-8")
 
+# HMAC-SHA256 signature
 digest = hmac.new(
     SIGNING_SECRET,
     body,
@@ -40,10 +43,22 @@ digest = hmac.new(
 
 headers = {
     "Content-Type": "application/json; charset=utf-8",
+    "Content-Length": str(len(body)),
     "X-Signature-256": f"sha256={digest}",
 }
 
-response = requests.post(ENDPOINT, data=body, headers=headers)
+# Debug (safe)
+print("DEBUG_BODY:", body.decode("utf-8"))
+print("DEBUG_SIGNATURE:", digest)
+print("DEBUG_ACTION_RUN_LINK:", ACTION_RUN_LINK)
+
+response = requests.post(
+    ENDPOINT,
+    data=body,
+    headers=headers,
+    timeout=30,
+)
+
 response.raise_for_status()
 
 print("Receipt:", response.json()["receipt"])
