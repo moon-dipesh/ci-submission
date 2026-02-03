@@ -11,7 +11,7 @@ jobs:
       EMAIL: ${{ vars.EMAIL }}
       RESUME_LINK: ${{ vars.RESUME_LINK }}
       REPOSITORY_LINK: ${{ vars.REPOSITORY_LINK }}
-      ACTION_RUN_LINK: ${{ vars.ACTION_RUN_LINK }}
+      ACTION_RUN_LINK: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
       SIGNING_SECRET: ${{ secrets.SIGNING_SECRET }}
     steps:
       - uses: actions/checkout@v4
